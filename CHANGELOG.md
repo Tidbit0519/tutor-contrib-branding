@@ -1,5 +1,31 @@
 # Change log
 
+## Version 18.6.0 (2024-09-07)
+- ref: Refactor download images
+- feat: Add BRANDING_HIDE_LOOKING_FOR_CHALLENGE_WIDGET setting
+
+## Version 18.5.0 (2024-08-26)
+- feat: Allow hiding the Programs tab and the sideber in the learner dashboard
+- feat: Make the course image fit in the course card at the learner dashboard.
+
+## Version 18.4.0 (2024-08-22)
+- feat: refactor BRANDING_THEME_REPOS to allow repo versioning
+
+## Version 18.3.0 (2024-08-21)
+- feat: Hide the upgrade button by default
+
+## Version 18.2.0 (2024-08-21)
+- fix: Use pre-npm install for custom branding, header and footers
+- fix: use gettext instead of ugettext in static html templates
+- feat: Add BRANDING_THEME_REPOS setting to allow downloading themes from git.
+- feat: Allow overriding MFE logos
+
+## Version 18.1.0 (2024-07-29)
+- Fix Refactor MFE overriding of branding, header and footer
+
+## Version 18.0.0 (2024-07-26)
+- Upgrade to Redwood
+
 ## Version 17.0.0 (2024-07-25)
 - Upgrade to Quince
 

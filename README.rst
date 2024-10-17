@@ -68,12 +68,6 @@ Managing fonts
 ~~~~~~~~~~~~~~
 
 Set ``BRANDING_FONTS_URLS`` to a list of URLS pointing to a zipped set of font files.
-Then use the ``tutor branding download-fonts`` command to download an unzip the font files
-to ``$(tutor config printroot)/env/build/openedx/themes/theme/lms/static/fonts`` and
-``$(tutor config printroot)/env/plugins/mfe/build/mfe/brand-openedx/fonts`` if the mfe plugin is enabled.
-
-Tip: copy the download url from the `<https://fonts.google.com>`__ site,
-for instance `<https://fonts.google.com/download?family=Roboto%20Flex>`__.
 
 E.g., to add Roboto Flex font, set:
 
@@ -82,13 +76,7 @@ E.g., to add Roboto Flex font, set:
     BRANDING_FONTS_URLS:
     - https://fonts.google.com/download?family=Roboto%20Flex
 
-Then run
-
-::
-
-    tutor branding download-fonts
-
-To add a specific font definition, use the ``BRANDING_FONTS`` setting, e.g.:
+Then add a specific font definition, use the ``BRANDING_FONTS`` setting, e.g.:
 
 ::
 
@@ -118,6 +106,7 @@ LMS:
 
 - favicon.ico
 - logo.png
+- banner.png
 
 CMS:
 
@@ -141,11 +130,23 @@ E.g., to add custom logos and banner set the following:
       url: https://url/to/studio-logo.png
     BRANDING_HOMEPAGE_BG_IMAGE: banner.png
 
-Then run
 
-::
+Customize MFE logos
+~~~~~~~~~~~~~~~~~~~~
 
-    tutor branding download-images
+By default, the MFEs will take the logos from the theme assets' main logo.
+However you can now customize the MFE logos by using these variables:
+
+- BRANDING_MFE_LOGO_URL: Main logo used in the headers
+- BRANDING_MFE_LOGO_TRADEMARK_URL: This is a URL to a logo for use in the footer.
+  This is a different environment variable than LOGO_URL (used in frontend-component-header)
+  to accommodate sites that would like to have additional trademark information on a logo
+  in the footer, such as a (tm) or (r) symbol.
+- BRANDING_MFE_LOGO_WHITE_URL: White logo over transparent background intended for
+  the login page and other sites where it printed over images or dark background.
+
+The value of these settings must be a public accessible URL containing the image.
+
 
 Custom HTML block in home page
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -223,6 +224,60 @@ push to your custom repository and set the repository URL in the variables:
 
 - BRANDING_FRONTEND_COMPONENT_HEADER_REPO
 - BRANDING_FRONTEND_COMPONENT_FOOTER_REPO
+
+
+Downloading custom themes from a git repo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is now possible to store one or more whole comprehensive themes in git repositories and download to the 
+Open edX instance. To do this, add the following configuration to config.yml:
+
+::
+
+    BRANDING_THEME_REPOS:
+      - name: <theme name>
+        url: <theme git URL, ending in .git>
+        version: <git branch or tag>
+      ...
+
+You can add as many themes as you want, however only one can be active at a time.
+After adding this, save the configuration and rebuild the openedx image.
+Then run `tutor <variant> do init [--limit branding]` to enable the first theme.
+
+Notes: 
+
+- theme repos are not templates; it means that other BRANDING\_ settings, logos and fonts  will have no effect.
+  Include your own fonts, images, CSS and variables in the repo.
+- Do not use `theme` as a theme name. This is reserved for the base theme created from the branding template.
+- To change templates, go to `<LMS URL>/admin/theming/sitetheme/` and set the theme name to all sites.
+  Use `theme` as theme name to use the base theme.
+- MFE logos are taken by default from the theme logo. Restart the MFE service if you changed your logo in the theme
+  to make it available to the MFEs.
+
+
+Customizing the Learner Dashboard
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Since Quince release, the new learner-dashboard MFE includes a number of features that might not
+be part of your use cases, and cannot be disabled with settings.
+
+- Hide the upgrade button
+    The Branding plugin now disables this button by default. But if you want it back,
+    just set `BRANDING_HIDE_UPGRADE_BUTTON` to `False`.
+
+- Hide the Programs tab
+    The Programs tab can be hidden by setting `BRANDING_HIDE_PROGRAMS` to True.
+
+- Hide the sidebar
+    The sidebar with the "Looking for new challenges" text can be hidden by setting
+    `BRANDING_HIDE_DASHBOARD_SIDEBAR` to True.
+
+- Hide the `Looking for a new challenge?` sidebar widget
+    You can leave the sidebar visible and hide only the widget by setting
+    `BRANDING_HIDE_LOOKING_FOR_CHALLENGE_WIDGET` to True.
+
+- Make the course image fit into the course card
+    By default, the images is clipped.
 
 Usage
 -----
